@@ -1,6 +1,8 @@
 /**
  * Created by lucky51 on 2017/9/26 0026.
  * github:https://github.com/lucky51/am-pagination
+ *
+ *
  */
 
   (function (root, factory) {
@@ -18,7 +20,7 @@
             var Pager = function (ele, opts) {
             var options = $.extend({}, $.fn.pagination.default, opts);
             this.ele = ele;
-           
+
             this.container=function(self){
                 if(self.checkTag(self.ele,'UL')){
                     return self.ele;
@@ -34,12 +36,26 @@
                     }
                 }
             };
+
             this.onChangePage=function(fn){
                 if(fn&&typeof fn==='function'){
                     this.ele.on('am.pagination.change',fn);
+                    console.log('add event');
                 }
                 return this;
             };
+                this.onDeleteEvent=function(){
+
+                    this.ele.off('am.pagination.change');
+                    this.ele.off('am.context.change');
+                  //  this.ele
+                    console.log('this.ele',this.ele);
+                   // console.log('contener=',this.container(this),this);
+                   // Pager.off('click');
+                  //  this.container(this).off('click');
+                    console.log('del event');
+                    return this;
+                };
             this.maxSize = options.maxSize || this.ele.data('maxSize');
             this._page = -1;
             this.totals =options.totals;
@@ -202,8 +218,11 @@
 
                 
             };
+            //    console.log('contener1=',this.container(this),this);
+            this.container(this).off('click', 'li>a');
             this.container(this).on('click', 'li>a', $.proxy(this.click, this));
             this.selectPage(options.page);
+
         };
      
         Pager.Global={
@@ -334,7 +353,7 @@
                 }
                 this.container(this).empty();
                 this.container(this).append($(htm.join('')));
-               
+
             }
         };
         $.fn.pagination = function (popts) {
